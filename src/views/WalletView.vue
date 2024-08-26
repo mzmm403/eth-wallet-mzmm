@@ -76,9 +76,8 @@
                 </div>
                 <div class="page">
                     <el-tabs v-model="activeName" type="card" class="tabs" stretch="true">
-                        <el-tab-pane class="money" label="功能" name="first">
-                            <div class="getmoney"><a href="https://portfolio.metamask.io/buy/region">获取代币➕️</a></div>
-                            <div class="refresh"><a @click="refreshPage">刷新列表🔄</a></div>
+                        <el-tab-pane class="list" label="当前转账结果" name="second">
+                            <div v-if="!TxID" style="margin-top: 20px;color: #757676;">当前没有转账结果</div>
                             <div class="showres" v-if="TxID">
                                 <p>交易ID📇</p>
                                 <p class="resvalue">{{ TxID }}</p>
@@ -88,7 +87,10 @@
                                 <p class="resvalue">{{ dst_money }}</p>
                             </div>
                         </el-tab-pane>
-                        <el-tab-pane class="list" label="账单" name="second">待开发</el-tab-pane>
+                        <el-tab-pane class="money" label="功能" name="first">
+                            <div class="getmoney"><a href="https://portfolio.metamask.io/buy/region">获取代币➕️</a></div>
+                            <div class="refresh"><a @click="refreshPage">刷新列表🔄</a></div>
+                        </el-tab-pane>
                     </el-tabs>
                 </div>
             </div>

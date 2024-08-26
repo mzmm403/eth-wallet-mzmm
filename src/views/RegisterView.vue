@@ -44,7 +44,6 @@ const createWallet = () => {
     }else{
         // 获取助记词
         const mnemonic = bip39.generateMnemonic()
-        console.log(mnemonic)
         router.push({path:"/mnemonic",query:{mnemonic:mnemonic,password:passwd.value,oldmnemonic:mnemonic}})
     }
 }

@@ -113,7 +113,7 @@ router.beforeEach((to, from, next) => {
                     </span>
                     </template>
                 </el-dialog>
-                <el-button type="primary" size="large" class="btn btn-reg" @click="toRegister" :disabled="isnullFlag"><span>创建钱包</span></el-button>
+                <el-button type="primary" size="large" class="btn btn-reg" @click="toRegister" :disabled="!isnullFlag"><span>创建钱包</span></el-button>
             </div>
         </div>
     </div>
