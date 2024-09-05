@@ -30,16 +30,6 @@ const router = createRouter({
     }
   ]
 })
-// 使用导航首位拉控制访问(对于注册页面)
-router.beforeEach((to,from,next) => {
-  const protectedRoutes = 'register'
-  if (protectedRoutes.includes(to.name) && from.name !== "home"){
-    next({ name:'home' })
-  }else{
-    // 允许导航
-    next()
-  }
-})
 
 
 export default router

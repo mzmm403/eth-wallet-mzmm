@@ -112,7 +112,6 @@ const route = useRoute()
 const walletStore = useWalletStore()
 const password = route.query.password
 const oldmnemonic = route.query.oldmnemonic
-console.log(oldmnemonic)
 const addressRef = ref("")
 const src_addressRef = ref("")
 const transferNetwork = ref("wss://mainnet.infura.io/ws/v3/85089d1c31974f81a22a20f43401d021")

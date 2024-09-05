@@ -5,15 +5,15 @@ import useWalletStore from "@/stores/wallet"
 import { hdkey } from 'ethereumjs-wallet'
 import * as bip39 from "bip39"
 import { Lock,Notebook } from '@element-plus/icons-vue'
-import { ElMessage } from 'element-plus'
 
 const router = useRouter()
+
+const walletStore = useWalletStore()
+let isnullFlag = ref(walletStore.isLocalNull())
+
 const toRegister = () => {
     router.push('/register')
 }
-
-const walletStore = useWalletStore()
-let isnullFlag = ref(walletStore.isLocalNull)
 
 let Flag = ref(false)
 let password = ref()
@@ -22,15 +22,15 @@ const isLoggedIn = ref(false);
 
 
 const intoWallet = async (password,passwd) => {
-    let isnull = walletStore.isLocalNull
-    if(isnull){
+    let isnull = walletStore.isLocalNull()
+    const loading = ElLoading.service({
+        lock: true,
+        text: '正在登录,请稍后...',
+        background: 'rgba(0, 0, 0, 0.7)',
+    })
+    if(!isnull){
         // 不为空登录，首先看助记词正不正确
         // 如果正确就跳转到用户界面(带上助记词跳转即可)
-        const loading = ElLoading.service({
-            lock: true,
-            text: '正在登录,请稍后...',
-            background: 'rgba(0, 0, 0, 0.7)',
-        })
         let oldmnemonic = password
         const seed = await bip39.mnemonicToSeed(oldmnemonic)
         const hdWallet = hdkey.fromMasterSeed(seed)
@@ -53,7 +53,7 @@ const intoWallet = async (password,passwd) => {
                     type: 'success',
                 })
             
-                router.push({path:"/wallet",query:{password:passwd,oldmnemonic}})
+                router.push({path:"wallet",query:{password:passwd,oldmnemonic}})
             }else{
                 loading.close()
                 ElMessage.error('密码错误')
@@ -73,16 +73,34 @@ const intoWallet = async (password,passwd) => {
 
 router.beforeEach((to, from, next) => {
     if (to.name === 'wallet') {
-        if (isLoggedIn.value) {
+        if (from.name === 'check' || isLoggedIn.value) {
             next(); 
         } else {
             ElMessage.error('请先登录');
             next({ name: 'home' });
         }
+    } else if(to.name === 'mnemonic'){
+        if (from.name === 'register'){
+            next()
+        } else {
+            ElMessage.error('无效的访问路径');
+            next({ name: 'register' })
+        }
+    } else if(to.name === 'check'){
+        if(from.name === 'mnemonic'){
+            next()
+        } else {
+            ElMessage.error('无效的访问路径');
+            next({ name: 'mnemonic' })
+        }
+    } else if(to.name === 'register' && !isnullFlag.value){
+        ElMessage.error('已存在账号，请登录')
+        next({ path: '/' })
     } else {
-        next(); 
+        next()
     }
-});
+})
+
 
 
 </script>
@@ -113,7 +131,7 @@ router.beforeEach((to, from, next) => {
                     </span>
                     </template>
                 </el-dialog>
-                <el-button type="primary" size="large" class="btn btn-reg" @click="toRegister" :disabled="!isnullFlag"><span>创建钱包</span></el-button>
+                <el-button type="primary" size="large" class="btn btn-reg" @click="toRegister"><span>创建钱包</span></el-button>
             </div>
         </div>
     </div>

@@ -14,9 +14,9 @@ const useWalletStore = defineStore("walletInfo",()=>{
   const isLocalNull = () => {
     let cacheWalletUser = localStorage.getItem("user_wallet")
     if(cacheWalletUser === null){
-      return false
-    }else{
       return true
+    }else{
+      return false
     }
   }
 
